@@ -4,6 +4,7 @@ import 'package:my_first_app/components/Home/IDOHot.dart';
 import 'package:my_first_app/components/Home/IDOMoreList.dart';
 import 'package:my_first_app/components/Home/IDOSlider.dart';
 import 'package:my_first_app/components/Home/IDOSuggestion.dart';
+import 'package:my_first_app/viewmodels/home.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -13,12 +14,32 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
+ final List<BannerItem> _bannerList = [
+  BannerItem(
+    id: "1", 
+    imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/1.jpg"
+    ),
+  BannerItem(
+    id: "2", 
+    imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/2.png"
+    ),
+  BannerItem(
+    id: "3", 
+    imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/3.jpg"
+    ),
+];
+
+  //https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/1.jpg
+  // https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/2.png
+  // https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/3.jpg
+
 //获取滚动容器的内容
 List<Widget>  _getScrollChildern(){
   //包裹普通widget的sliver家族的组件
   return [
     //轮播图组件包裹普通widget,这里IDOSlider尽量不参与sliver家族 只做普通widget显示
-     SliverToBoxAdapter(child:IDOSlider()),
+     SliverToBoxAdapter(child:IDOSlider(bannerList: _bannerList)),//这里用到了父传子
     //间隔
      SliverToBoxAdapter(child: SizedBox(height: 10)),
     //放置分类这里需要横行排列 SliverGrid SliverList只能纵向排列
@@ -44,10 +65,10 @@ List<Widget>  _getScrollChildern(){
           ),
         )
       ),
-  //间隔
+       //间隔
      SliverToBoxAdapter(child: SizedBox(height: 10)),
      //更多列表
-     IDOMoreList(),
+     IDOMoreList()
 
     ];
 }
