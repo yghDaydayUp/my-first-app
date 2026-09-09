@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_app/viewmodels/home.dart';
 
@@ -12,6 +13,20 @@ class IDOSlider extends StatefulWidget {
 }
 
 class _IDOSliderState extends State<IDOSlider> {
+
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     _getNetWork();
+
+  }
+  void _getNetWork(){
+      Dio().get("https://geek.itheima.net/v1_0/channels").then((res){
+        print("网络请求:$res");
+      }).catchError((error){});
+  }
+
    CarouselSliderController _controller =
       CarouselSliderController(); // 控制轮播图跳转的控制器
   int _currentIndex = 0; 
@@ -86,7 +101,7 @@ class _IDOSliderState extends State<IDOSlider> {
                 onTap: () { //触发点击时的逻辑
                   _controller.jumpToPage(index);
                 },
-                child: AnimatedContainer( //隐式动画组件
+                child: AnimatedContainer( //隐式动画组件 过度动画
                     duration: Duration(milliseconds: 300),
                     height: 6,
                     width: index == _currentIndex ? 40 : 20,
