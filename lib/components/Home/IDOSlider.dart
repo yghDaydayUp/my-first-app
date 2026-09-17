@@ -39,8 +39,6 @@ class _IDOSliderState extends State<IDOSlider> {
     return CarouselSlider(
       carouselController: _controller, //绑定controller对象
       items:List.generate(widget.bannerList.length, (int index){
-        String  imgUrl = widget.bannerList[index].imgUrl;
-        print("轮播imgUrl= $imgUrl");
       return Image.network(
         widget.bannerList[index].imgUrl,////父传子对内方法用 widget. 获取
         fit: BoxFit.cover,//图片平铺

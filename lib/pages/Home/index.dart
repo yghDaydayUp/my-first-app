@@ -15,7 +15,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-
+  //分类数据
+  List<CategoryItem> _categoryList = [];
+  //轮播图数据
   List<BannerItem> _bannerList = [
   // BannerItem(
   //   id: "1", 
@@ -44,7 +46,7 @@ List<Widget>  _getScrollChildern(){
     //间隔
      SliverToBoxAdapter(child: SizedBox(height: 10)),
     //放置分类这里需要横行排列 SliverGrid SliverList只能纵向排列
-     SliverToBoxAdapter(child: IDOCategory()),
+     SliverToBoxAdapter(child: IDOCategory(categoryList: _categoryList,)),//这里用到了父传子
      //间隔
      SliverToBoxAdapter(child: SizedBox(height: 10)),
      //特惠推荐
@@ -80,6 +82,8 @@ List<Widget>  _getScrollChildern(){
     super.initState();
     //轮播列表
     _getBannderList();
+    //分类列表
+    _getCategoryList();
   }
   
   //获取轮播列表
@@ -87,6 +91,12 @@ List<Widget>  _getScrollChildern(){
   void _getBannderList()async{
    _bannerList = await getBannerListAPI();
     setState(() {});//熟悉
+  }
+
+  //获取分类列表
+  void _getCategoryList()async{
+    _categoryList = await getCategoryListAPI();
+    setState(() {});
   }
 
   @override

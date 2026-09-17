@@ -4,6 +4,7 @@ import 'package:my_first_app/constants/index.dart';
 import 'package:my_first_app/utils/DioRequest.dart';
 import 'package:my_first_app/viewmodels/home.dart';
 
+//轮播图数据
 //异步操作，返回一个 BannerItem 类型的列表
 Future <List<BannerItem>> getBannerListAPI()async{
   //返回请求
@@ -18,3 +19,12 @@ Future <List<BannerItem>> getBannerListAPI()async{
   }).toList();
 }
 
+//分类列表数据
+Future <List<CategoryItem>> getCategoryListAPI()async{
+  //返回请求
+  return (await(dioRequest.get(HttpConstants.CATEGORY_LIST)) as List).map((
+    item,
+  ){
+    return CategoryItem.formJson(item as Map <String, dynamic>);
+  }).toList();
+}
