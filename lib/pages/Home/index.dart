@@ -15,6 +15,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  //
   //分类数据
   List<CategoryItem> _categoryList = [];
   //轮播图数据
@@ -37,6 +38,15 @@ class _HomeViewState extends State<HomeView> {
   // https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/2.png
   // https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/3.jpg
 
+ //特惠推荐数据
+SpecialRecommendResult _specialRecommendResult = SpecialRecommendResult(
+  id: "",
+  title: "",
+  subTypes: [],
+);
+    
+
+
 //获取滚动容器的内容
 List<Widget>  _getScrollChildern(){
   //包裹普通widget的sliver家族的组件
@@ -50,7 +60,7 @@ List<Widget>  _getScrollChildern(){
      //间隔
      SliverToBoxAdapter(child: SizedBox(height: 10)),
      //特惠推荐
-     SliverToBoxAdapter(child: IDOSuggestion()),
+     SliverToBoxAdapter(child: IDOSuggestion(specialRecommendResult: _specialRecommendResult,)),//这里用到了父传子
       //间隔
      SliverToBoxAdapter(child: SizedBox(height: 10)),
 
@@ -84,8 +94,16 @@ List<Widget>  _getScrollChildern(){
     _getBannderList();
     //分类列表
     _getCategoryList();
+    //特惠推荐列表
+    _getSpecialRecommendList();
   }
-  
+
+  //获取特惠推荐数据
+  void _getSpecialRecommendList()async{
+    _specialRecommendResult = await getSuggestionListAPI();
+    setState(() {});
+  }
+
   //获取轮播列表
   //async：标记为异步方法，允许内部使用 await 关键字
   void _getBannderList()async{
