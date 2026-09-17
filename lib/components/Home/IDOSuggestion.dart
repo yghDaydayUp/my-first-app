@@ -111,7 +111,7 @@ class _IDOSuggestionState extends State<IDOSuggestion> {
           padding: EdgeInsets.all(12),
           // height: 100,
           decoration:BoxDecoration(
-            color: Colors.blue,
+            color: const Color.fromARGB(255, 225, 228, 231),
             borderRadius:BorderRadius.circular(12),
             image:DecorationImage(
               image: AssetImage("lib/assets/home_cmd_sm.png"),

@@ -45,7 +45,18 @@ SpecialRecommendResult _specialRecommendResult = SpecialRecommendResult(
   subTypes: [],
 );
     
-
+// 热榜推荐
+  SpecialRecommendResult _inVogueResult = SpecialRecommendResult(
+    id: "",
+    title: "",
+    subTypes: [],
+  );
+  // 一站式推荐
+  SpecialRecommendResult _oneStopResult = SpecialRecommendResult(
+    id: "",
+    title: "",
+    subTypes: [],
+  );
 
 //获取滚动容器的内容
 List<Widget>  _getScrollChildern(){
@@ -71,9 +82,9 @@ List<Widget>  _getScrollChildern(){
           child: Flex(
             direction: Axis.horizontal,//横向
             children: [
-              Expanded(child: IDOHot()),//均分剩余空间
+              Expanded(child: IDOHot(result: _inVogueResult, type: "vogue")),//均分剩余空间
               SizedBox(width: 10),
-              Expanded(child: IDOHot()),//均分剩余空间
+              Expanded(child: IDOHot(result: _oneStopResult, type: "step")),//均分剩余空间
             ],
           ),
         )
@@ -96,7 +107,12 @@ List<Widget>  _getScrollChildern(){
     _getCategoryList();
     //特惠推荐列表
     _getSpecialRecommendList();
+    // 获取热榜推荐列表
+    _getInVogueList();
+     // 获取一站式推荐列表
+     _getOneStopList();
   }
+  
 
   //获取特惠推荐数据
   void _getSpecialRecommendList()async{
@@ -104,16 +120,28 @@ List<Widget>  _getScrollChildern(){
     setState(() {});
   }
 
-  //获取轮播列表
+  //获取分类列表
+  void _getCategoryList()async{
+    _categoryList = await getCategoryListAPI();
+    setState(() {});
+  }
+
+   //获取轮播列表
   //async：标记为异步方法，允许内部使用 await 关键字
   void _getBannderList()async{
    _bannerList = await getBannerListAPI();
     setState(() {});//熟悉
   }
 
-  //获取分类列表
-  void _getCategoryList()async{
-    _categoryList = await getCategoryListAPI();
+  // 获取热榜推荐列表
+  void _getInVogueList() async {
+    _inVogueResult = await getInVogueListAPI();
+    setState(() {});
+  }
+
+  // 获取一站式推荐列表
+  void _getOneStopList() async {
+    _oneStopResult = await getOneStopListAPI();
     setState(() {});
   }
 
