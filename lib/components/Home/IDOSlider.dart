@@ -14,18 +14,18 @@ class IDOSlider extends StatefulWidget {
 
 class _IDOSliderState extends State<IDOSlider> {
 
-   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-     _getNetWork();
+  //  @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //    _getNetWork();
 
-  }
-  void _getNetWork(){
-      Dio().get("https://geek.itheima.net/v1_0/channels").then((res){
-        print("网络请求:$res");
-      }).catchError((error){});
-  }
+  // }
+  // void _getNetWork(){
+  //     Dio().get("https://geek.itheima.net/v1_0/channels").then((res){
+  //       print("网络请求:$res");
+  //     }).catchError((error){});
+  // }
 
    CarouselSliderController _controller =
       CarouselSliderController(); // 控制轮播图跳转的控制器
@@ -39,6 +39,8 @@ class _IDOSliderState extends State<IDOSlider> {
     return CarouselSlider(
       carouselController: _controller, //绑定controller对象
       items:List.generate(widget.bannerList.length, (int index){
+        String  imgUrl = widget.bannerList[index].imgUrl;
+        print("轮播imgUrl= $imgUrl");
       return Image.network(
         widget.bannerList[index].imgUrl,////父传子对内方法用 widget. 获取
         fit: BoxFit.cover,//图片平铺

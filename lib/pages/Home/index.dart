@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_app/api/home.dart';
 import 'package:my_first_app/components/Home/IDOCategory.dart';
 import 'package:my_first_app/components/Home/IDOHot.dart';
 import 'package:my_first_app/components/Home/IDOMoreList.dart';
@@ -15,19 +16,19 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
 
- final List<BannerItem> _bannerList = [
-  BannerItem(
-    id: "1", 
-    imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/1.jpg"
-    ),
-  BannerItem(
-    id: "2", 
-    imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/2.png"
-    ),
-  BannerItem(
-    id: "3", 
-    imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/3.jpg"
-    ),
+  List<BannerItem> _bannerList = [
+  // BannerItem(
+  //   id: "1", 
+  //   imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/1.jpg"
+  //   ),
+  // BannerItem(
+  //   id: "2", 
+  //   imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/2.png"
+  //   ),
+  // BannerItem(
+  //   id: "3", 
+  //   imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/3.jpg"
+  //   ),
 ];
 
   //https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/1.jpg
@@ -72,7 +73,22 @@ List<Widget>  _getScrollChildern(){
 
     ];
 }
+
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //轮播列表
+    _getBannderList();
+  }
   
+  //获取轮播列表
+  //async：标记为异步方法，允许内部使用 await 关键字
+  void _getBannderList()async{
+   _bannerList = await getBannerListAPI();
+    setState(() {});//熟悉
+  }
+
   @override
   Widget build(BuildContext context) {
     //build 里尽量不放太多代码,进一步提取方法

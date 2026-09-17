@@ -57,6 +57,7 @@ class DioRequest {
         Response<dynamic> res = await task;
         //把响应体里的数据（res.data）强制转换成 Map<String, dynamic> 类
         final data  = res.data as Map<String,dynamic>;// data才是我们真实的接口返回的数据
+        print("轮播图请求接口 $data");
         if(data["code"] == GlobalConstants.SUCCESS_CODE){
           // 才认定 http状态和业务状态均正常 就可以正常的放行通过
           return data["result"];//只要result结果
