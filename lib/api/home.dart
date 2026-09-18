@@ -52,3 +52,28 @@ Future<SpecialRecommendResult> getOneStopListAPI() async {
     await dioRequest.get(HttpConstants.ONE_STOP_LIST),
   );
 }
+
+// 更多推荐 GoodDetailItem  请求参数 params
+//as List 将响应数据强制转换为 List 类型
+//.map((item) { ... }) 遍历列表中的每个元素
+//将原始的 JSON 对象（Map<String, dynamic>）转换为强类型的 GoodDetailItem 模型对象
+//.toList() 将 map 操作返回的惰性 Iterable 转换为具体的 List<GoodDetailItem>。
+/**
+  服务器返回 JSON 数组
+       ↓
+  Dio 解析为 List<dynamic>
+        ↓
+  遍历每个元素 (map)
+        ↓
+  每个元素转为 GoodDetailItem 对象 (formJSON)
+        ↓
+  收集为 List<GoodDetailItem>
+        ↓
+  返回给调用方
+ */
+Future<List<GoodDetailItem>> getRecommendListAPI(Map<String, dynamic> params) async {
+  // 返回请求
+  return (await dioRequest.get(HttpConstants.MORE_LIST,params:params ) as List).map((item) {
+    return GoodDetailItem.formJSON(item as Map<String, dynamic>);
+  }).toList();
+}

@@ -46,17 +46,20 @@ SpecialRecommendResult _specialRecommendResult = SpecialRecommendResult(
 );
     
 // 热榜推荐
-  SpecialRecommendResult _inVogueResult = SpecialRecommendResult(
-    id: "",
-    title: "",
-    subTypes: [],
-  );
-  // 一站式推荐
-  SpecialRecommendResult _oneStopResult = SpecialRecommendResult(
-    id: "",
-    title: "",
-    subTypes: [],
-  );
+SpecialRecommendResult _inVogueResult = SpecialRecommendResult(
+  id: "",
+  title: "",
+  subTypes: [],
+);
+// 一站式推荐
+SpecialRecommendResult _oneStopResult = SpecialRecommendResult(
+  id: "",
+  title: "",
+  subTypes: [],
+);
+
+//推荐列表
+List<GoodDetailItem> _recommendList = [];
 
 //获取滚动容器的内容
 List<Widget>  _getScrollChildern(){
@@ -92,7 +95,7 @@ List<Widget>  _getScrollChildern(){
        //间隔
      SliverToBoxAdapter(child: SizedBox(height: 10)),
      //更多列表
-     IDOMoreList()
+     IDOMoreList(recommendList: _recommendList),
 
     ];
 }
@@ -111,13 +114,15 @@ List<Widget>  _getScrollChildern(){
     _getInVogueList();
      // 获取一站式推荐列表
      _getOneStopList();
+     // 获取推荐列表
+     _getRecommendList();
   }
   
-
-  //获取特惠推荐数据
-  void _getSpecialRecommendList()async{
-    _specialRecommendResult = await getSuggestionListAPI();
-    setState(() {});
+    //获取轮播列表
+  //async：标记为异步方法，允许内部使用 await 关键字
+  void _getBannderList()async{
+   _bannerList = await getBannerListAPI();
+    setState(() {});//熟悉
   }
 
   //获取分类列表
@@ -126,12 +131,12 @@ List<Widget>  _getScrollChildern(){
     setState(() {});
   }
 
-   //获取轮播列表
-  //async：标记为异步方法，允许内部使用 await 关键字
-  void _getBannderList()async{
-   _bannerList = await getBannerListAPI();
-    setState(() {});//熟悉
+  //获取特惠推荐数据
+  void _getSpecialRecommendList()async{
+    _specialRecommendResult = await getSuggestionListAPI();
+    setState(() {});
   }
+
 
   // 获取热榜推荐列表
   void _getInVogueList() async {
@@ -142,6 +147,11 @@ List<Widget>  _getScrollChildern(){
   // 获取一站式推荐列表
   void _getOneStopList() async {
     _oneStopResult = await getOneStopListAPI();
+    setState(() {});
+  }
+  // 获取推荐列表
+  void _getRecommendList() async {
+    _recommendList = await getRecommendListAPI({"limit": 10});
     setState(() {});
   }
 

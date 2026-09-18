@@ -422,3 +422,31 @@ class SpecialRecommendResult {
 
 }
 
+//推荐列表数据
+//父类定义基础结构，子类扩展业务属性
+//GoodDetailItem 复用了父类的商品基础信息，同时增加了“支付人数”这个详情页特有的指标
+class GoodDetailItem extends GoodsItem {
+  int payCount = 0;  
+  /// 商品详情项
+  GoodDetailItem({
+    required super.id,
+    required super.name,
+    String? desc,
+    required super.price,
+    required super.picture,
+    required super.orderNum,
+    required this.payCount,
+  }) : super(desc: "");
+  // 转化方法 对传入的 JSON 数据进行逻辑处理
+  factory GoodDetailItem.formJSON(Map<String, dynamic> json) {
+    return GoodDetailItem(
+      id: json["id"]?.toString() ?? "",
+      name: json["name"]?.toString() ?? "",
+      desc: json["desc"]?.toString(),
+      price: json["price"]?.toString() ?? "",
+      picture: json["picture"]?.toString() ?? "",
+      orderNum: int.tryParse(json["orderNum"]?.toString() ?? "0") ?? 0,
+      payCount: int.tryParse(json["payCount"]?.toString() ?? "0") ?? 0,
+    );
+  }
+}
