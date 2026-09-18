@@ -43,7 +43,7 @@ class _IDOMoreListState extends State<IDOMoreList> {
             style: TextStyle(fontSize: 12, color: Colors.black),
           ),
         ),
-        
+
         SizedBox(height: 8),
 
         Padding(
@@ -64,6 +64,7 @@ class _IDOMoreListState extends State<IDOMoreList> {
                       fontWeight: FontWeight.w800,
                       ),
                     ),
+                    TextSpan(text:" "),
                     TextSpan(
                       text: "${widget.recommendList[index].price}",
                       style: TextStyle(

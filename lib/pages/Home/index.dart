@@ -61,6 +61,11 @@ SpecialRecommendResult _oneStopResult = SpecialRecommendResult(
 //推荐列表
 List<GoodDetailItem> _recommendList = [];
 
+int _recommendListPage = 1; // 当前页码
+bool _hasMoreData = true; // 是否还有更多数据
+bool _isLoading = false; // 是否正在加载数据
+
+
 //获取滚动容器的内容
 List<Widget>  _getScrollChildern(){
   //包裹普通widget的sliver家族的组件
@@ -116,6 +121,8 @@ List<Widget>  _getScrollChildern(){
      _getOneStopList();
      // 获取推荐列表
      _getRecommendList();
+
+     _registerEvent(); // 注册滚动监听事件
   }
   
     //获取轮播列表
@@ -151,13 +158,41 @@ List<Widget>  _getScrollChildern(){
   }
   // 获取推荐列表
   void _getRecommendList() async {
-    _recommendList = await getRecommendListAPI({"limit": 10});
+    if (_isLoading || !_hasMoreData) {
+      return; // 如果正在加载或没有更多数据，直接返回
+    }
+    _isLoading = true; // 标记为正在加载
+    int requestLimit = _recommendListPage * 10; // 每页请求的数量
+    _recommendList = await getRecommendListAPI({"limit":requestLimit});
+    _isLoading = false; // 标记为加载完成
     setState(() {});
+    if (_recommendList.length < requestLimit) {
+      _hasMoreData = false; // 如果返回的数据少于请求的数量，说明没有更多数据
+      return;
+    }
+    _recommendListPage++; // 增加页码
   }
+
+  //监听滚动到底部的事件
+void _registerEvent() {
+  _scrollController.addListener(() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 50) {
+      // 当滚动到接近底部时，加载更多数据
+      _getRecommendList();
+    }
+  });
+}
+
+  //声明滚动容器
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     //build 里尽量不放太多代码,进一步提取方法
-    return CustomScrollView(slivers:_getScrollChildern());//sliver家族的组件
+    return CustomScrollView(
+      controller: _scrollController,//滚动控制器 定义控制器绑定组件
+      slivers:_getScrollChildern()
+      );//sliver家族的组件
   }
 }
