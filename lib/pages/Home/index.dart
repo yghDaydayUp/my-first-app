@@ -109,55 +109,49 @@ List<Widget>  _getScrollChildern(){
   void initState() {
     // TODO: implement initState
     super.initState();
-    //轮播列表
-    _getBannderList();
-    //分类列表
-    _getCategoryList();
-    //特惠推荐列表
-    _getSpecialRecommendList();
-    // 获取热榜推荐列表
-    _getInVogueList();
-     // 获取一站式推荐列表
-     _getOneStopList();
-     // 获取推荐列表
-     _getRecommendList();
-
      _registerEvent(); // 注册滚动监听事件
+     /*
+      创建的任务进入微任务队列，在当前帧所有渲染步骤完成后才被执行。因为渲染管线是同步执行的，
+      微任务必须等渲染结束、事件循环回到队列检查时才会被调度
+      相当于 iOS 控制器的 viewDidAppear 方法触发时机 （视图已完全渲染并可见）
+     */
+     Future.microtask((){//创建一个微任务，延迟到当前帧渲染完成后执行
+        _paddingTop = 100;//偏移 触发自动下拉时
+        setState(() {});
+        _globalKey.currentState?.show(); // 显示刷新指示器 ，自动调用 onRefresh
+     });
   }
   
     //获取轮播列表
   //async：标记为异步方法，允许内部使用 await 关键字
-  void _getBannderList()async{
+  Future<void> _getBannderList()async{
    _bannerList = await getBannerListAPI();
-    setState(() {});//熟悉
   }
 
   //获取分类列表
-  void _getCategoryList()async{
+  Future<void> _getCategoryList()async{
     _categoryList = await getCategoryListAPI();
-    setState(() {});
   }
 
   //获取特惠推荐数据
-  void _getSpecialRecommendList()async{
+  Future<void> _getSpecialRecommendList()async{
     _specialRecommendResult = await getSuggestionListAPI();
-    setState(() {});
   }
 
 
   // 获取热榜推荐列表
-  void _getInVogueList() async {
+  Future<void> _getInVogueList() async {
     _inVogueResult = await getInVogueListAPI();
-    setState(() {});
   }
 
   // 获取一站式推荐列表
-  void _getOneStopList() async {
+   Future<void> _getOneStopList() async {
     _oneStopResult = await getOneStopListAPI();
-    setState(() {});
   }
+  //Future<void> 返回类型：调用者可以等待
+  //只要函数里有 await，返回类型就写 Future<void>，永远不要用 void
   // 获取推荐列表
-  void _getRecommendList() async {
+  Future<void> _getRecommendList() async {
     if (_isLoading || !_hasMoreData) {
       return; // 如果正在加载或没有更多数据，直接返回
     }
@@ -184,15 +178,67 @@ void _registerEvent() {
   });
 }
 
+ //下拉刷新
+  Future<void> _onRefresh() async {
+    // 重置状态
+    _recommendListPage = 1;
+    _hasMoreData = true;
+    _isLoading = false;
+    // 重新获取数据
+    //只要函数里有 await，返回类型就写 Future<void>，永远不要用 void
+    //轮播列表
+    await _getBannderList();
+    //分类列表
+    await _getCategoryList();
+    //特惠推荐列表
+    await _getSpecialRecommendList();
+    // 获取热榜推荐列表
+    await _getInVogueList();
+     // 获取一站式推荐列表
+    await _getOneStopList();
+     // 获取推荐列表
+    await _getRecommendList();
+    _paddingTop = 0;
+    setState(() {});//刷新页面
+
+  }
+
   //声明滚动容器
   final ScrollController _scrollController = ScrollController();
 
+  // GlobalKey是一个方法可以创建一个key绑定到Widget部件上 可以操作Widget部件
+  final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+
+  double _paddingTop = 0;//偏移 触发自动下拉时 
+
   @override
   Widget build(BuildContext context) {
+    //build 里尽量不放太多代码,进一步提取方法
+    //RefreshIndicator 和 CustomScrollView 这两个组件是 Flutter 中实现下拉刷新 + 复杂滚动布局的黄金搭档。
+    //简单来说，CustomScrollView 负责搭建复杂的滚动页面结构，而 RefreshIndicator 负责给这个页面添加下拉刷新的交互能力
+     return RefreshIndicator(
+          key: _globalKey,
+          onRefresh:_onRefresh,//下拉刷新回调
+          //AnimatedContainer 是 Flutter 中最常用的隐式动画组件，它继承自 Container，但增加了自动动画过渡能力
+          //用作下拉刷新的过度动画
+          child: AnimatedContainer(
+            padding: EdgeInsets.only(top: _paddingTop),//下拉偏移
+            duration: Duration(milliseconds: 300),
+            child: CustomScrollView(
+              controller: _scrollController,//滚动控制器 定义控制器绑定组件
+              slivers:_getScrollChildern()
+            ),
+          ),
+         
+        );
+    }
+
+
+     /*
     //build 里尽量不放太多代码,进一步提取方法
     return CustomScrollView(
       controller: _scrollController,//滚动控制器 定义控制器绑定组件
       slivers:_getScrollChildern()
       );//sliver家族的组件
-  }
+   */
 }
