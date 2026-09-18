@@ -5,6 +5,7 @@ import 'package:my_first_app/components/Home/IDOHot.dart';
 import 'package:my_first_app/components/Home/IDOMoreList.dart';
 import 'package:my_first_app/components/Home/IDOSlider.dart';
 import 'package:my_first_app/components/Home/IDOSuggestion.dart';
+import 'package:my_first_app/utils/ToastUtils.dart';
 import 'package:my_first_app/viewmodels/home.dart';
 
 class HomeView extends StatefulWidget {
@@ -198,6 +199,8 @@ void _registerEvent() {
     await _getOneStopList();
      // 获取推荐列表
     await _getRecommendList();
+    //数据获取成功 刷新成功了 
+     ToastUtils.showToast(context,"刷新成功了");
     _paddingTop = 0;
     setState(() {});//刷新页面
 
