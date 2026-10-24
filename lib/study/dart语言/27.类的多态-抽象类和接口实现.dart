@@ -1,3 +1,9 @@
+
+/**
+  Dart中类的多态-抽象类和接口实现
+  ●方式：使用abstract关键字声明一个抽象类(没有实现体)
+  ●方式：使用implements关键字继承并实现抽象类
+ */
 void main(List<String> args) {
   PayBase wx = WxPay();
   PayBase ali = AliPay();

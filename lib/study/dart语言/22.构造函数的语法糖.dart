@@ -1,3 +1,14 @@
+
+/**
+  Dart中类的构造函数-构造函数语法糖
+  ● 定义：同名构造函数和命名构造函数都支持简写写法
+  ● 语法：
+  class 类名 {
+  类名({ this.属性1，this.属性2 });
+  或
+  类名.命名函数({ this.属性1，this.属性2 });
+}
+ */
 void main(List<String> args) {
   Person p = Person(name: '老高', age: 20, sex: '男');
   // p.name = "老高";

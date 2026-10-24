@@ -9,7 +9,7 @@ void main(List<String> args) {
   double appleCount = 1.5;
   print('我买了$appleCount斤苹果');
   //friendCount = appleCount; // 不允许直接赋值
-  //friendCount = appleCount.toInt();
+  friendCount = appleCount.toInt();
   appleCount = friendCount.toDouble();
   appleCount = rest.toDouble(); // num可以转化成double给double赋值
   rest = appleCount; // double可以直接给num赋值
