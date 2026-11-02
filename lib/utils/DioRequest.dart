@@ -46,6 +46,10 @@ class DioRequest {
       return _handleResponse(_dio.get(url,queryParameters: params));
    }
 
+   // 定义post接口
+  Future<dynamic> post(String url, {Map<String, dynamic>? data}) {
+    return _handleResponse(_dio.post(url, data: data));
+  }
    
     // 进一步处理返回结果的函数
     //返回值是一个异步的 Future，类型是 dynamic（可以是任意类型）

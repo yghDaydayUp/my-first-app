@@ -1,5 +1,8 @@
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_app/api/user.dart';
+import 'package:my_first_app/utils/LoadingDialog.dart';
 import 'package:my_first_app/utils/ToastUtils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -32,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         }
         return null;
       },
-        controller: _codeController,
+        controller: _phoneController,
         //BoxDecoration → 给 Container / DecoratedBox 用的，是盒子背景、边框、圆角、阴影
         //inputDecoration → 给 TextField / TextFormField 用的，专门做输入框的 UI（标签、占位、错误文字、前缀图标、边框线）
         decoration: InputDecoration(
@@ -61,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         }
         return null;
       },
-      controller: _phoneController,
+      controller: _codeController,
       obscureText: true,//密码框
       decoration: InputDecoration(
         contentPadding: EdgeInsets.only(left: 20), // 内容内边距
@@ -128,7 +131,25 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
-
+_login() async {
+    // 调用登录接口
+    try {
+      LoadingDialog.show(context, message: "努力登录中");
+      final res = await loginAPI({
+        "account": _phoneController.text,
+        "password": _codeController.text,
+      });
+      LoadingDialog.hide(context);
+      ToastUtils.showToast(context, "登录成功");
+    
+    } catch (e) {
+      LoadingDialog.hide(context);
+      ToastUtils.showToast(context, (e as DioException).message);
+    }
+    // 此时一定登录成功
+    // http状态吗 2xx 业务状态吗 业务执行成功 1
+  }
+  // 登录按钮Widget
   Widget _buildLoginButton(){
      //SizedBox 就是一个用来占位、撑尺寸、做间距的空白盒子
      // 1. 用来做间距  2. 用来给控件强制固定宽高
@@ -149,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
             // 进行勾选框的判断
             if (_isChecked) {
               // 校验通过
-              // _login();
+               _login();
             } else {
               // 提示请勾选用户协议
               ToastUtils.showToast(context, "请勾选用户协议");
