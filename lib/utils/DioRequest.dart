@@ -13,6 +13,7 @@ class DioRequest {
      ..sendTimeout  = Duration(seconds:GlobalConstants.TIME_OUT) // 发送超时
      ..receiveTimeout =   Duration(seconds:GlobalConstants.TIME_OUT); //接收超时
      //拦截器
+     _addInterceptor();
    }
   // 添加拦截器
    void _addInterceptor(){
