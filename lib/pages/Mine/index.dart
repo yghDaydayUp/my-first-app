@@ -1,7 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
 import 'package:my_first_app/api/mine.dart';
 import 'package:my_first_app/components/Home/IDOMoreList.dart';
 import 'package:my_first_app/components/Mine/IDOGuess.dart';
+import 'package:my_first_app/stores/UserController.dart';
 import 'package:my_first_app/viewmodels/home.dart';
 
 class MineView extends StatefulWidget {
@@ -11,6 +16,13 @@ class MineView extends StatefulWidget {
   State<MineView> createState() => _MineViewState();
 }
 class _MineViewState extends State<MineView> {
+ final UserController _userController = Get.find();
+  ImageProvider _getAvatar(String avatarUrl) {
+    if (avatarUrl.isNotEmpty) {
+      return NetworkImage(avatarUrl);
+    }
+    return const AssetImage('lib/assets/goods_avatar.png');
+  }
 //Mine 头部
   Widget _buildHead(){
     return Container(
@@ -27,28 +39,40 @@ class _MineViewState extends State<MineView> {
       padding: const EdgeInsets.only(left: 20,top: 80,right: 20,bottom: 20),
         child: Row(//水平布局
           children: [
-            // Flutter 内置的圆形头像组件，专门用于显示用户头像、商品缩略图等圆形图片场景，
-            CircleAvatar(
+          Obx((){
+              // Flutter 内置的圆形头像组件，专门用于显示用户头像、商品缩略图等圆形图片场景，
+           return CircleAvatar(
               radius: 26,
-              backgroundImage: const AssetImage('lib/assets/goods_avatar.png'),
+              backgroundImage: _getAvatar(_userController.user.value.avatar),
               backgroundColor: Colors.white,
-            ),
+            );
+          }),
+          
             const SizedBox(width: 12),
             Expanded(//右侧：占满剩余空间
               child: Column(//垂直排列
                 crossAxisAlignment: CrossAxisAlignment.start,//垂直左对齐
                 children: [
-                  GestureDetector(
+                Obx((){
+                 return GestureDetector(
                     onTap: () {
                       // 点击头像或昵称时触发的操作
                       print('点击了头像或昵称');
-                      Navigator.pushNamed(context, "/login");//跳转到登录界面
+                      if(_userController.user.value.id.isEmpty){
+                         print('跳转登录界面');
+                         Navigator.pushNamed(context, "/login");//跳转到登录界面
+                      }else{
+                         print('当前已经登录不需要跳转登录界面');
+                      }
+                     
                     },
-                    child: Text( '立即登录',
+                    // 有登录信息 显示用户信息 否则显示立即登录
+                    child: Text( _userController.user.value.id.isNotEmpty?_userController.user.value.account : '立即登录',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                      
-                  ),
+                    );
+                   }),
                  
                 ],
               ),

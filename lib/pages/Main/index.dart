@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:my_first_app/pages/Cart/index.dart';
 import 'package:my_first_app/pages/Category/index.dart';
 import 'package:my_first_app/pages/Home/index.dart';
 import 'package:my_first_app/pages/Mine/index.dart';
+import 'package:my_first_app/stores/UserController.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -64,7 +66,7 @@ class _MainPageState extends State<MainPage> {
     //这里返回了首页 分类 购物车 我的 相关封装在对于文件夹的组件
     return [HomeView(),CategoryView(),CartView(),MineView()];
   } 
-
+  final UserController _userController = Get.put(UserController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
