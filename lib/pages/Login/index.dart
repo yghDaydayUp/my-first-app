@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:my_first_app/api/user.dart';
+import 'package:my_first_app/stores/TokenManager.dart';
 import 'package:my_first_app/stores/UserController.dart';
 import 'package:my_first_app/utils/LoadingDialog.dart';
 import 'package:my_first_app/utils/ToastUtils.dart';
@@ -15,7 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
- TextEditingController _phoneController = TextEditingController(); // 账号控制器
+  TextEditingController _phoneController = TextEditingController(); // 账号控制器
   TextEditingController _codeController = TextEditingController(); // 密码控制器
   // 用户账号Widget
   /**
@@ -145,7 +146,8 @@ _login() async {
       LoadingDialog.hide(context);
       ToastUtils.showToast(context, "登录成功");
       _userController.updateUserInfo(res);
-
+       tokenManager.setToken(res.token);
+      
       Navigator.pop(context);//登录成功返回上一级
     
     } catch (e) {

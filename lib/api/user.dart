@@ -13,3 +13,6 @@ Future<UserInfo> loginAPI(Map<String, dynamic> data) async {
   );
 }
 
+Future<UserInfo> getUserInfoAPI() async {
+  return UserInfo.fromJSON(await dioRequest.get(HttpConstants.USER_PROFILE));
+}
